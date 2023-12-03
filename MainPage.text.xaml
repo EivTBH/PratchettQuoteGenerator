@@ -1,0 +1,140 @@
+﻿<Page x:Class="PratchettQuoteGenerator.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:local="using:PratchettQuoteGenerator"
+      mc:Ignorable="d"
+      DataContext="{Binding RelativeSource={RelativeSource Self}}"
+      >
+
+    <Page.Background>
+        <ImageBrush ImageSource="Assets/library.jpg" Stretch="UniformToFill" />
+    </Page.Background>
+    
+    <Page.Resources>
+        <FontFamily x:Key="TextBlockFontFamily1">Freestyle Script</FontFamily>
+        <FontFamily x:Key="TextBlockFontFamily2">Tempus Sans ITC</FontFamily>
+
+
+
+        <Style TargetType="ScrollBar" x:Key="CustomVerticalScrollBarStyle">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Red" />
+            <Setter Property="BorderThickness" Value="3" />
+            <!-- Add more setters as per your customization -->
+        </Style>
+
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- First Column -->
+        <Grid Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="326*"/>
+                <ColumnDefinition Width="93*"/>
+                <ColumnDefinition Width="222*"/>
+            </Grid.ColumnDefinitions>
+
+            <ComboBox x:Name="CharacterDropdown" 
+                      SelectedItem="{Binding SelectedCharacter, Mode=TwoWay}" 
+                      ItemsSource="{Binding CharacterNames}" 
+                      PlaceholderText="Select A Character" 
+                      Height="32" 
+                      Grid.ColumnSpan="3" 
+                      FontWeight="Bold" Margin="173,802,0,0">
+                <ComboBox.Background>
+                    <ImageBrush ImageSource="/Assets/Parchment.png" Stretch="None"/>
+                </ComboBox.Background>
+            </ComboBox>
+            <Image x:Name="CharacterImage" Source="{Binding CharacterImageSource}" />
+        </Grid>
+
+        <!-- Second Column -->
+        <Grid Grid.Column="1" Margin="0,291,0,0" Height="779" VerticalAlignment="Top" >
+            <Image x:Name="Parchment" 
+                   Stretch="Uniform" 
+                   Source="/Assets/Parchment2.png" 
+                   Width="640" Height="Auto" 
+                   Margin="-16,-274,0,-80" 
+                   HorizontalAlignment="Left"/>
+
+            <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                          HorizontalScrollBarVisibility="Auto" 
+                          Margin="117,10,0,198" 
+                          RenderTransformOrigin="0.5,0.5" 
+                          HorizontalAlignment="Left" 
+                          UseLayoutRounding="False" 
+                          Width="445" 
+                          d:LayoutRounding="Auto">
+                <ScrollViewer.Resources>
+                    <Style TargetType="ScrollBar" BasedOn="{StaticResource CustomVerticalScrollBarStyle}" />
+                </ScrollViewer.Resources>
+                <TextBlock x:Name="QuoteTextBlock" 
+                           Text="{Binding SelectedQuoteText}" 
+                           FontSize="25" 
+                           FontWeight="Bold" 
+                           TextWrapping="Wrap" 
+                           FocusVisualPrimaryBrush="#FFFF9D0E" 
+                           Foreground="#FF4A2C00" 
+                           FontFamily="{StaticResource TextBlockFontFamily2}" 
+                           IsTextSelectionEnabled="True" 
+                           CanDrag="True" 
+                           TextAlignment="Center" 
+                           SelectionHighlightColor="#FFB5B5B5" 
+                           UseLayoutRounding="True" 
+                           AutomationProperties.Level="1" 
+                           ManipulationMode="Scale" 
+                           Width="400" />
+            </ScrollViewer>
+        </Grid>
+
+        <!-- Third Column -->
+        <Grid Grid.Column="2" HorizontalAlignment="Center">
+            <Image Source="/Assets/envelope.png" Width="Auto" Height="Auto" VerticalAlignment="Top" Margin="72,252,-72,0" UseLayoutRounding="False" d:LayoutRounding="Auto">
+                <Image.FocusVisualPrimaryBrush>
+                    <ImageBrush/>
+                </Image.FocusVisualPrimaryBrush>
+                <Image.RenderTransform>
+                    <CompositeTransform Rotation="-63.915"/>
+                </Image.RenderTransform>
+            </Image>
+
+            <Button x:Name="button" 
+                    VerticalAlignment="Top" 
+                    BorderThickness="0" 
+                    Width="Auto" 
+                    Height="Auto" 
+                    Margin="159,100,0,0"  
+                    Background="#00000000" 
+                    BorderBrush="#00000000" 
+                    FocusVisualPrimaryBrush="#00000000" 
+                    FocusVisualSecondaryBrush="#00000000" 
+                    ClickMode="Press" 
+                    IsHitTestVisible="True">
+                <Button.Foreground>
+                    <SolidColorBrush Color="#00000000" Opacity="0"/>
+                </Button.Foreground>
+                <Image Width="154" Height="154" 
+                       Source="/Assets/ampo2.png" 
+                       AutomationProperties.HelpText="Click to mail us!" 
+                       FocusVisualPrimaryBrush="#00000000" 
+                       FocusVisualSecondaryBrush="#00000000" 
+                       IsDoubleTapEnabled="False" 
+                       ManipulationMode="Rotate" 
+                       AllowFocusOnInteraction="False" />
+            </Button>
+        </Grid>
+    </Grid>
+</Page>

@@ -1,0 +1,48 @@
+﻿<Page
+    x:Class="PratchettQuoteGenerator.WelcomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:PratchettQuoteGenerator"
+    mc:Ignorable="d">
+
+    <Page.Background>
+        <ImageBrush ImageSource="Assets/backgroundWel.png" Stretch="UniformToFill" />
+    </Page.Background>
+
+    <Page.Resources>
+        <local:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+        <!-- Custom style for buttons without hover effects -->
+        <Style x:Key="NoHoverButtonStyle" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="RootBorder" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              Content="{TemplateBinding Content}" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+        <MediaElement x:Name="BackgroundMusic" Source="Assets/background.flac" AutoPlay="True" Volume="0.2" MediaEnded="BackgroundMusic_MediaEnded" />
+        <MediaElement x:Name="ButtonSoundPlayer" AutoPlay="False" Source="Assets/click.mp3" Volume="1.0" />
+
+<TextBlock x:Name="TextBlock" HorizontalAlignment="Center" Margin="0,220,0,0" TextWrapping="Wrap" Text="Welcome to the Pratchett Quote Generator App, where the ordinary is shown the door and the extraordinary is invited in for tea. Here, in this enclave of eccentricity, you are the master of your own fantastical journey. Amidst a motley crew of characters plucked from the pages of tongue-in-cheek fantasy novels, you have the power, nay, the solemn duty, to select your favorite whimsical hero, nefarious villain, or perplexingly ambiguous sorcerer. Once chosen, simply prod the 'Random' button – a device more temperamental than a dragon with a toothache – and behold! A quote, as unique as a goblin's fashion sense, will leap forth. These pearls of wisdom (or folly, depending on your chosen character and their disposition towards existential quandaries) will whisk you away on a whirlwind of laughter, sarcasm, and the occasionally accidental insight. So adjust your metaphorical spectacles and embark on this literary escapade, but beware, for the path of humor is winding and peppered with puns!" VerticalAlignment="Top" Height="458" Width="331" FontSize="16" Foreground="#FF370700" TextAlignment="Center" FontFamily="Ink Free" />
+
+        <Button Style="{StaticResource NoHoverButtonStyle}" x:Name="MuteButton" Click="MuteButton_Click" Margin="1416,10,0,0" VerticalAlignment="Top" Width="74"
+                Height="Auto" FocusVisualPrimaryBrush="#00000000" Foreground="#00000000" FocusVisualSecondaryBrush="Transparent" Background="#00000000">
+            <Image x:Name="MuteImage" Source="Assets/mute3.png" Height="50" HorizontalAlignment="Center" Width="52"/>
+        </Button>
+
+        <Button Content="Go to Main Page"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Click="GoToMainPageButton_Click"  Margin="0,688,0,0" Foreground="White" FontFamily="Ink Free" BorderBrush="#FF0B1238"/>
+    </Grid>
+</Page>

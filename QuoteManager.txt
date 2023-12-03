@@ -1,0 +1,45 @@
+﻿using System;
+using System.Collections.Generic;
+
+public class Quote
+{
+    public string Text { get; set; }
+    public string Author { get; set; }
+    public string Book { get; set; }
+    public List<string> Characters { get; set; }
+}
+
+
+
+public class QuoteManager
+{
+    private readonly List<Quote> quotes;
+    private readonly Random random = new Random();
+
+    public QuoteManager(List<Quote> quotes)
+    {
+        this.quotes = quotes;
+    }
+
+    public List<Quote> GetQuotes()
+    {
+        return quotes;
+    }
+
+    public string GetRandomQuote()
+    {
+        if (quotes.Count == 0)
+        {
+            return "No quotes available.";
+        }
+
+        Quote randomQuote = GetRandomQuoteInternal();
+        return $"\"{randomQuote.Text}\" - {randomQuote.Author}, {randomQuote.Book}";
+    }
+
+    private Quote GetRandomQuoteInternal()
+    {
+        int index = random.Next(quotes.Count);
+        return quotes[index];
+    }
+}

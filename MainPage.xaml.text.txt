@@ -1,0 +1,180 @@
+﻿using PratchettQuoteGenerator.ViewModels;
+using System;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Imaging;
+using Windows.Storage.Pickers;
+using Windows.Storage;
+using Windows.UI.ViewManagement;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Collections.Generic;
+using Newtonsoft.Json;
+
+
+namespace PratchettQuoteGenerator
+{
+    public sealed partial class MainPage : Page
+    {
+        private MainPageViewModel viewModel = new MainPageViewModel();
+
+        public MainPage()
+        {
+            this.InitializeComponent();
+            viewModel = new MainPageViewModel(); // Initialize your view model
+            DataContext = viewModel; // Set the DataContext
+
+            // Load quotes and populate data
+            LoadQuotesFromFile();
+
+            ApplicationView.PreferredLaunchViewSize = new Windows.Foundation.Size(1920, 1080);
+            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
+        }
+
+        private readonly Dictionary<string, string> characterImages = new Dictionary<string, string>
+        {
+            {"Death", "ms-appx:///Assets/death.jpg"},
+            {"Wee Mad Arthur", "ms-appx:///Assets/weemadarthur.jpg"},
+            {"Samuel Vimes", "ms-appx:///Assets/samuelvimes.jpg"},
+            {"Albert", "ms-appx:///Assets/albert.png"},
+            {"Nanny Ogg", "ms-appx:///Assets/nannyogg.jpg"},
+            {"Hogfather", "ms-appx:///Assets/hogfather.jpg"},
+            {"Granny Weatherwax", "ms-appx:///Assets/grannyweatherwax.jpg"},
+            {"Twoflower", "ms-appx:///Assets/twoflower.jpg"},
+            {"Rincewind", "ms-appx:///Assets/rincewind.jpg"},
+            {"Detritus", "ms-appx:///Assets/detritus.jpg"},
+            {"Dorfl", "ms-appx:///Assets/dorfl.jpg"},
+            {"The Librarian", "ms-appx:///Assets/thelibrarian.jpg"},
+            {"Lu-Tze", "ms-appx:///Assets/lutze.jpg"},
+            {"Lord Vetinari", "ms-appx:///Assets/lordvetinari.jpg"},
+            {"Cheery", "ms-appx:///Assets/cheery.jpg"},
+            {"Dwarfs", "ms-appx:///Assets/dwarfs.jpg"},
+            {"Igor", "ms-appx:///Assets/igor.jpg"},
+            {"Pin", "ms-appx:///Assets/pin.jpg"},
+            {"Angua", "ms-appx:///Assets/angua.jpg"},
+            {"Sam Vimes", "ms-appx:///Assets/samvimes.jpg"},
+            {"The Duck Man", "ms-appx:///Assets/theduckman.jpg"},
+            {"Nobby Nobbs", "ms-appx:///Assets/nobbynobbs.jpg"},
+            {"Cuddy", "ms-appx:///Assets/cuddy.jpg"},
+            {"The Luggage", "ms-appx:///Assets/theluggage.jpg"},
+            {"Tiffany Aching", "ms-appx:///Assets/tiffanyaching.jpg"},
+            {"Magrat Garlick", "ms-appx:///Assets/magratgarlick.jpg"},
+            {"Fred Colon", "ms-appx:///Assets/fredcolon.jpg"},
+            {"Adora Belle Dearheart", "ms-appx:///Assets/adorabelledearheart.jpg"},
+            {"Gaspode", "ms-appx:///Assets/gaspode.jpg"},
+            {"Greebo", "ms-appx:///Assets/greebo.jpg"},
+            {"The Auditors", "ms-appx:///Assets/theauditors.png"},
+            {"Ponder Stibbons", "ms-appx:///Assets/ponderstibbons.jpg"},
+            {"Stibbons", "ms-appx:///Assets/stibbons.jpg"},
+            {"Gytha Ogg", "ms-appx:///Assets/gythaogg.jpg"},
+            {"Mr. Tulip", "ms-appx:///Assets/mrtulip.jpg"},
+            {"Mustrum Ridcully", "ms-appx:///Assets/mustrumridcully.jpg"},
+            {"Hex", "ms-appx:///Assets/hex.jpg"},
+            {"Foul Ole Ron", "ms-appx:///Assets/fouloron.jpg"},
+            {"Binky", "ms-appx:///Assets/binky.jpg"},
+            {"The Bursar", "ms-appx:///Assets/thebursar.jpg"},
+            {"Foul Ol' Ron", "ms-appx:///Assets/fouloron2.jpg"},
+            {"Agnes Nitt", "ms-appx:///Assets/agnesnitt.jpg"},
+            {"Leonard of Quirm", "ms-appx:///Assets/leonardofquirm.jpg"},
+            {"Billy Slick", "ms-appx:///Assets/billyslick.jpg"},
+            {"Dibbler", "ms-appx:///Assets/dibbler.jpg"},
+            {"Reg Shoe", "ms-appx:///Assets/regshoe.jpg"},
+            {"Otto Chriek", "ms-appx:///Assets/ottochriek.jpg"},
+            {"Captain Carrot", "ms-appx:///Assets/captaincarrot.jpg"},
+            {"Cheery Littlebottom", "ms-appx:///Assets/cheery.jpg"}
+            
+            // Add more character-image mappings as needed
+        };
+
+        private async void LoadQuotesFromFile()
+        {
+            try
+            {
+                StorageFile file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///pratchett_quotes_withchars.json"));
+                string jsonContent = await FileIO.ReadTextAsync(file);
+                viewModel.Quotes = JsonConvert.DeserializeObject<ObservableCollection<Quote>>(jsonContent); // Here's where the error occurs
+            }
+            catch (Exception ex)
+            {
+                // Handle file loading error
+            }
+        }
+
+        private void PopulateCharacterDropdown()
+        {
+            var characterNames = viewModel.Quotes
+                .SelectMany(q => q.Characters)
+                .Distinct()
+                .ToList();
+
+            viewModel.CharacterNames = new ObservableCollection<string>(characterNames);
+        }
+        private void CharacterDropdown_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string selectedCharacter = viewModel.SelectedCharacter;
+
+            if (selectedCharacter != null)
+            {
+                if (viewModel.CharacterImages.ContainsKey(selectedCharacter))
+                {
+                    string imagePath = viewModel.CharacterImages[selectedCharacter];
+                    viewModel.CharacterImageSource = new BitmapImage(new Uri(imagePath, UriKind.RelativeOrAbsolute));
+                }
+                else
+                {
+                    viewModel.CharacterImageSource = null; // Clear the image if no mapping found
+                }
+
+                // Display quotes for the selected character
+                var characterQuotes = viewModel.Quotes
+                    .Where(q => q.Characters.Contains(selectedCharacter))
+                    .Select(q => $"{q.Text} - {q.Author}, {q.Book}");
+
+                if (characterQuotes.Any())
+                {
+                    viewModel.SelectedQuoteText = string.Join("\n\n", characterQuotes);
+                }
+                else
+                {
+                    viewModel.SelectedQuoteText = "No quotes available for this character.";
+                }
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            viewModel.Quotes = new ObservableCollection<Quote>(viewModel.Quotes
+                .Where(q => !q.Text.Contains("Unknown") && !q.Author.Contains("Unknown") && !q.Book.Contains("Unknown"))
+                .ToList());
+
+            if (viewModel.Quotes.Count == 0)
+            {
+                viewModel.SelectedQuoteText = "No valid quotes available.";
+            }
+            else
+            {
+                Random random = new Random();
+                Quote randomQuote = viewModel.Quotes[random.Next(viewModel.Quotes.Count)];
+                string formattedQuote = randomQuote.Text.Replace("\"", "'");
+                string formattedAuthor = randomQuote.Author.Replace("\"", "'");
+                string formattedBook = randomQuote.Book.Replace("\"", "'");
+
+                string formattedOutput = $"{formattedQuote} - \n\n{formattedAuthor.TrimEnd(',')}";
+
+                if (!string.IsNullOrEmpty(formattedBook))
+                {
+                    formattedOutput += $",\n{formattedBook}";
+                }
+
+                viewModel.SelectedQuoteText = formattedOutput;
+            }
+        }
+
+        private void ExitFullScreenButton_Click(object sender, RoutedEventArgs e)
+        {
+            ApplicationView.GetForCurrentView().ExitFullScreenMode();
+        }
+
+        // Add any other event handlers or methods as needed
+    }
+}

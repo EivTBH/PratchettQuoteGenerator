@@ -1,0 +1,206 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using Windows.Storage;
+using Windows.UI.Xaml.Media.Imaging;
+using Newtonsoft.Json;
+
+namespace PratchettQuoteGenerator.ViewModels
+{
+    public class MainPageViewModel : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private List<Quote> quotes;
+        private Dictionary<string, string> characterImages;
+
+
+        private string selectedCharacter;
+        public string SelectedCharacter
+        {
+            get { return selectedCharacter; }
+            set
+            {
+                if (selectedCharacter != value)
+                {
+                    selectedCharacter = value;
+                    OnPropertyChanged(nameof(SelectedCharacter));
+                }
+            }
+        }
+
+        private ObservableCollection<string> characterNames;
+        public ObservableCollection<string> CharacterNames
+        {
+            get { return characterNames; }
+            set
+            {
+                if (characterNames != value)
+                {
+                    characterNames = value;
+                    OnPropertyChanged(nameof(CharacterNames));
+                }
+            }
+        }
+
+        private BitmapImage characterImageSource;
+        public BitmapImage CharacterImageSource
+        {
+            get { return characterImageSource; }
+            set
+            {
+                if (characterImageSource != value)
+                {
+                    characterImageSource = value;
+                    OnPropertyChanged(nameof(CharacterImageSource));
+                }
+            }
+        }
+
+        private ObservableCollection<Quote> quotesList;
+        public ObservableCollection<Quote> Quotes
+        {
+            get { return quotesList; }
+            set
+            {
+                if (quotesList != value)
+                {
+                    quotesList = value;
+                    OnPropertyChanged(nameof(Quotes));
+                }
+            }
+        }
+
+        private string selectedQuoteText;
+        public string SelectedQuoteText
+        {
+            get { return selectedQuoteText; }
+            set
+            {
+                if (selectedQuoteText != value)
+                {
+                    selectedQuoteText = value;
+                    OnPropertyChanged(nameof(SelectedQuoteText));
+                }
+            }
+        }
+
+        public Dictionary<string, string> CharacterImages
+        {
+            get { return characterImages; }
+            set
+            {
+                if (characterImages != value)
+                {
+                    characterImages = value;
+                    OnPropertyChanged(nameof(CharacterImages));
+                }
+            }
+        }
+
+        // Add other properties as needed
+
+        public MainPageViewModel()
+        {
+            // Initialize properties
+            quotes = new List<Quote>();
+            characterImages = new Dictionary<string, string>();
+
+            // Load quotes and character images
+            LoadQuotesFromFile();
+            PopulateCharacterImages();
+        }
+
+        public async void LoadQuotesFromFile()
+        {
+            try
+            {
+                StorageFile file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///pratchett_quotes_withchars.json"));
+                string jsonContent = await FileIO.ReadTextAsync(file);
+
+                // Deserialize JSON content to List<Quote> and assign it to Quotes
+                Quotes = JsonConvert.DeserializeObject<ObservableCollection<Quote>>(jsonContent);
+
+                // Populate character images
+                PopulateCharacterImages();
+            }
+            catch (Exception ex)
+            {
+                // Handle file loading error
+                // Add code to handle the error (e.g., log or display a message)
+            }
+        }
+
+        private void PopulateCharacterImages()
+        {
+            characterImages = new Dictionary<string, string>
+    {
+        {"Death", "ms-appx:///Assets/death.jpg"},
+            {"Wee Mad Arthur", "ms-appx:///Assets/weemadarthur.jpg"},
+            {"Samuel Vimes", "ms-appx:///Assets/samuelvimes.jpg"},
+            {"Albert", "ms-appx:///Assets/albert.png"},
+            {"Nanny Ogg", "ms-appx:///Assets/nannyogg.jpg"},
+            {"Hogfather", "ms-appx:///Assets/hogfather.jpg"},
+            {"Granny Weatherwax", "ms-appx:///Assets/grannyweatherwax.jpg"},
+            {"Twoflower", "ms-appx:///Assets/twoflower.jpg"},
+            {"Rincewind", "ms-appx:///Assets/rincewind.jpg"},
+            {"Detritus", "ms-appx:///Assets/detritus.jpg"},
+            {"Dorfl", "ms-appx:///Assets/dorfl.jpg"},
+            {"The Librarian", "ms-appx:///Assets/thelibrarian.jpg"},
+            {"Lu-Tze", "ms-appx:///Assets/lutze.jpg"},
+            {"Lord Vetinari", "ms-appx:///Assets/lordvetinari.jpg"},
+            {"Cheery", "ms-appx:///Assets/cheery.jpg"},
+            {"Dwarfs", "ms-appx:///Assets/dwarfs.jpg"},
+            {"Igor", "ms-appx:///Assets/igor.jpg"},
+            {"Pin", "ms-appx:///Assets/pin.jpg"},
+            {"Angua", "ms-appx:///Assets/angua.jpg"},
+            {"Sam Vimes", "ms-appx:///Assets/samvimes.jpg"},
+            {"The Duck Man", "ms-appx:///Assets/theduckman.jpg"},
+            {"Nobby Nobbs", "ms-appx:///Assets/nobbynobbs.jpg"},
+            {"Cuddy", "ms-appx:///Assets/cuddy.jpg"},
+            {"The Luggage", "ms-appx:///Assets/theluggage.jpg"},
+            {"Tiffany Aching", "ms-appx:///Assets/tiffanyaching.jpg"},
+            {"Magrat Garlick", "ms-appx:///Assets/magratgarlick.jpg"},
+            {"Fred Colon", "ms-appx:///Assets/fredcolon.jpg"},
+            {"Adora Belle Dearheart", "ms-appx:///Assets/adorabelledearheart.jpg"},
+            {"Gaspode", "ms-appx:///Assets/gaspode.jpg"},
+            {"Greebo", "ms-appx:///Assets/greebo.jpg"},
+            {"The Auditors", "ms-appx:///Assets/theauditors.png"},
+            {"Ponder Stibbons", "ms-appx:///Assets/ponderstibbons.jpg"},
+            {"Stibbons", "ms-appx:///Assets/stibbons.jpg"},
+            {"Gytha Ogg", "ms-appx:///Assets/gythaogg.jpg"},
+            {"Mr. Tulip", "ms-appx:///Assets/mrtulip.jpg"},
+            {"Mustrum Ridcully", "ms-appx:///Assets/mustrumridcully.jpg"},
+            {"Hex", "ms-appx:///Assets/hex.jpg"},
+            {"Foul Ole Ron", "ms-appx:///Assets/fouloron.jpg"},
+            {"Binky", "ms-appx:///Assets/binky.jpg"},
+            {"The Bursar", "ms-appx:///Assets/thebursar.jpg"},
+            {"Foul Ol' Ron", "ms-appx:///Assets/fouloron2.jpg"},
+            {"Agnes Nitt", "ms-appx:///Assets/agnesnitt.jpg"},
+            {"Leonard of Quirm", "ms-appx:///Assets/leonardofquirm.jpg"},
+            {"Billy Slick", "ms-appx:///Assets/billyslick.jpg"},
+            {"Dibbler", "ms-appx:///Assets/dibbler.jpg"},
+            {"Reg Shoe", "ms-appx:///Assets/regshoe.jpg"},
+            {"Otto Chriek", "ms-appx:///Assets/ottochriek.jpg"},
+            {"Captain Carrot", "ms-appx:///Assets/captaincarrot.jpg"},
+            {"Cheery Littlebottom", "ms-appx:///Assets/cheery.jpg"}
+            
+        // Add other character-image mappings as needed
+    };
+
+            // Set the CharacterImages property with the populated dictionary
+            CharacterImages = characterImages;
+        }
+
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+
+    }
+}
