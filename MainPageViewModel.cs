@@ -252,7 +252,7 @@ namespace PratchettQuoteGenerator
             { "Tiffany Aching", "ms-appx:///Assets/tiffanyaching.jpg" },
             { "Magrat Garlick", "ms-appx:///Assets/magratgarlick.jpg" },
             { "Fred Colon", "ms-appx:///Assets/fredcolon.jpg" },
-            { "Adora Belle Dearheart", "ms-appx:///Assets/adorabelledearheart.jpg" },
+            { "Adora Belle Dearheart", "ms-appx:///Assets/adorabelledearheart.png" },
             { "Gaspode", "ms-appx:///Assets/gaspode.jpg" },
             { "Greebo", "ms-appx:///Assets/greebo.jpg" },
             { "The Auditors", "ms-appx:///Assets/theauditors.png" },
@@ -291,7 +291,7 @@ namespace PratchettQuoteGenerator
                         var formattedText = q.Text.TrimEnd(',', ' '); // Remove trailing commas and spaces
                         var bookText = q.Book?.TrimEnd(','); // Remove trailing comma from the book title
                         return
-                            $"{formattedText}\n\n{q.Author}\n\n{bookText} \n\n ------ \n\n"; // Removed '-' before author's name
+                            $"{formattedText}\n\n{q.Author}\n\n{bookText} \n\n ---|--- \n\n"; // Removed '-' before author's name
                     });
 
                 SelectedQuoteText = characterQuotes.Any()
@@ -321,7 +321,7 @@ namespace PratchettQuoteGenerator
                 var formattedText = randomQuote.Text.TrimEnd(',', ' ', '-');
                 var bookText = randomQuote.Book?.TrimEnd(','); // Remove trailing comma from the book title
                 SelectedQuoteText =
-                    $"{formattedText}\n\n{randomQuote.Author}\n\n{bookText} \n\n ------ \n\n"; // Removed '-' before author's name
+                    $"{formattedText}\n\n{randomQuote.Author}\n\n{bookText} \n\n ---|--- \n\n"; // Removed '-' before author's name
             }
             else
             {

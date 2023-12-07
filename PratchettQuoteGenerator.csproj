@@ -166,6 +166,7 @@
     <Content Include="Assets\dorfl.jpg" />
     <Content Include="Assets\dwarfs.jpg" />
     <Content Include="Assets\envelope.png" />
+    <Content Include="Assets\envelope2.png" />
     <Content Include="Assets\fouloron.jpg" />
     <Content Include="Assets\fouloron2.jpg" />
     <Content Include="Assets\frame.png" />
